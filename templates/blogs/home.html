@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Wordtag | Home{% endblock %}
+
+{% block content %}
+<h1>Hello {{ user.username }}, you're logged in!</h1>
+<div id="blogs">
+  {% for blog in blogs %}
+    <h3>
+      <a href="{% url 'blogs:detail' pk=blog.pk %}">{{ blog.title }}</a>
+    </h3>
+  {% empty %}
+    <p>
+      You have no blogs!
+    </p>
+    <p>
+      <a href="{% url 'blogs:create' %}"><button>Create a blog!</button></a>
+    </p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %} {{blog.title}} {% endblock %}
+
+{% block content %}
+<h1>{{ blog.title }}</h1>
+<div>
+  {% if user.is_authenticated %}
+  <a href="{% url 'blogs:post-create' blog_pk=blog.pk %}">
+    <button>Add Post!</button>
+  </a>
+  {% endif %}
+</div>
+{% for post in blog.posts.all %}
+  <h4>
+    <a href="{% url 'blogs:post-detail' blog_pk=blog.pk pk=post.pk %}">
+      {{ post.title }}
+    </a>
+  </h4>
+{% empty %}
+  <h4>No posts yet!</h4>
+{% endfor %}
+
+{% endblock %}

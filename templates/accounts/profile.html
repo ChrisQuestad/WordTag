@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div><button>Create Profile</button></div>
+</form>
+{% endblock %}
