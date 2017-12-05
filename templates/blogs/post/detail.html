@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+{% load static %}
 {% block title %} {{post.title}} {% endblock %}
 
 {% block content %}
@@ -8,4 +9,14 @@
 <p>
   {{ post.body }}
 </p>
+{% if user.is_authenticated and post.blog.user == user %}
+  <form id="delete-post">
+    {% csrf_token %}
+    <button>Delete</button>
+  </form>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/delete_post.js' %}"></script>
 {% endblock %}

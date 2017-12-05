@@ -17,23 +17,24 @@ class AccountLogoutView(auth.LogoutView):
         return redirect('accounts:login')
 
 class AccountProfileView(View):
+    def get(self, request):
+        return redirect('home')
+
+
+class AccountProfileEditView(View):
     template_name = 'accounts/profile.html'
     form_class = ProfileForm
 
     def get(self, request, *args, **kwargs):
-        if not hasattr(request.user, 'profile'):
-            form = self.form_class()
+            form = self.form_class(instance=request.user.profile)
             return render(request, self.template_name, {'form': form})
-        else:
-            return redirect('home')
+
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
-            model = form.save(commit=False)
-            model.user = request.user
-            model.save()
-            return redirect('accounts:profile')
+            form.save()
+            return redirect('accounts:update')
         else:
             return render(request, self.template_name, {'form':form})
 
@@ -54,6 +55,6 @@ class AccountRegisterView(View):
             user = authenticate(username=form.cleaned_data['username'],
                                 password=form.cleaned_data['password1'])
             login(request, user)
-            return redirect('accounts:profile')
+            return redirect('accounts:update')
         else:
             return render(request, self.template_name, {'form':form})

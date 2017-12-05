@@ -61,6 +61,8 @@ TEMPLATES = [
     },
 ]
 
+CSRF_USE_SESSIONS = True
+
 WSGI_APPLICATION = 'wordtag.wsgi.application'
 
 
@@ -115,3 +117,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# Media path
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

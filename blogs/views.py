@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.http.response import HttpResponse
 
 
 from .models import Blog, Post, Comment
@@ -22,6 +23,15 @@ class HomePageView(View):
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blogs/detail.html'
+
+    def delete(self, request, *args, **kwargs):
+        model = Blog.objects.get(pk=self.kwargs['pk'])
+        if model.user == request.user and request.is_ajax():
+            model.delete()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=402)
+
 
 @method_decorator(login_required, name='dispatch')
 class BlogCreateView(View):
@@ -51,6 +61,14 @@ class PostDetailView(DetailView):
     def get_queryset(self):
         return Post.objects.filter(blog__pk=self.kwargs['blog_pk'])
 
+    def delete(self, request, *args, **kwargs):
+        model = Post.objects.get(pk=self.kwargs['pk'])
+        if model.blog.user == request.user and request.is_ajax():
+            model.delete()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=402)
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -60,6 +78,10 @@ class PostCreateView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
+        blog = Blog.objects.get(pk=self.kwargs['blog_pk'])
+
+        if not blog.user == request.user:
+            return HttpResponse(status=402)
 
         return render(request, self.template_name, {'form': form})
 

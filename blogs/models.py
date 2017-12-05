@@ -1,15 +1,19 @@
 from django.db import models
+from autoslug import AutoSlugField
 
 class Blog(models.Model):
     title = models.CharField(max_length=32)
     description = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
+    url = models.CharField(max_length=32, primary_key=True)
+
 
     user = models.ForeignKey('auth.User',
                             on_delete=models.CASCADE,
                             related_name='blogs')
 
 class Post(models.Model):
+    slug = AutoSlugField(populate_from='title', primary_key=True)
     title = models.CharField(max_length=64)
     body = models.TextField()
 

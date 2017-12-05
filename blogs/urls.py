@@ -4,7 +4,7 @@ from .views import *
 
 urlpatterns = [
     url(r'^create$', BlogCreateView.as_view(), name='create'),
-    url(r'^(?P<pk>[\d]+)$', BlogDetailView.as_view(), name='detail'),
-    url(r'^(?P<blog_pk>[\d]+)/post/(?P<pk>[\d]+)$', PostDetailView.as_view(), name='post-detail'),
-    url(r'^(?P<blog_pk>[\d]+)/create$', PostCreateView.as_view(), name='post-create'),
+    url(r'^(?P<pk>[\w-]+)$', BlogDetailView.as_view(), name='detail'),
+    url(r'^(?P<blog_pk>[\w-]+)/post/(?P<pk>[\w-]+)$', PostDetailView.as_view(), name='post-detail'),
+    url(r'^(?P<blog_pk>[\w-]+)/create$', PostCreateView.as_view(), name='post-create'),
 ]
